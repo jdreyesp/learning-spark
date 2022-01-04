@@ -1,10 +1,11 @@
-package com.jdreyesp.sparkexamples
+package com.jdreyesp.learningspark.chapter2
 
+import com.jdreyesp.learningspark.SparkProvider
 import org.apache.spark.sql.DataFrame
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 
-class Chapter2 extends AnyFlatSpec with SparkProvider {
+class BasicExercisesSpec extends AnyFlatSpec with SparkProvider {
 
   val readme_source = getClass.getClassLoader.getResource("README.md").getPath
 
@@ -33,10 +34,7 @@ class Chapter2 extends AnyFlatSpec with SparkProvider {
     val result: Int = filtered.count().toInt
 
     //Then
-    result shouldBe 20
+    result shouldBe 19
   }
 
-//  it should "count M&Ms for the cookie monster" {
-//
-//  }
 }

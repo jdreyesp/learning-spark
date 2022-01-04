@@ -1,4 +1,4 @@
-package com.jdreyesp.sparkexamples
+package com.jdreyesp.learningspark
 
 import org.apache.spark.sql.SparkSession
 

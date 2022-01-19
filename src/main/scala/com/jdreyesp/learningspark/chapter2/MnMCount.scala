@@ -8,6 +8,7 @@ object MnMCount extends App {
   val spark = SparkSession.builder()
     .appName("MnMCount")
     .master("local[*]")
+    .config("spark.driver.bindAddress", "localhost")
     .getOrCreate()
 
   if (args.length < 1) {

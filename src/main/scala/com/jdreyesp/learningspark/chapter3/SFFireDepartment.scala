@@ -1,7 +1,8 @@
 package com.jdreyesp.learningspark.chapter3
 
-import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.functions.{col, countDistinct, desc, expr, month, to_timestamp, year}
+import org.apache.spark.sql.{SaveMode, SparkSession}
+import org.apache.spark.sql.functions.{col, countDistinct, dayofmonth, desc, expr, format_number, month, to_timestamp, weekofyear, year}
+import org.apache.spark.sql.types.FloatType
 
 object SFFireDepartment extends App {
 
@@ -121,8 +122,47 @@ object SFFireDepartment extends App {
     .select("Neighborhood", "count")
     .show(10, false)
 
-  println("Which neighborhood had the worst response times to fire calls in 2018?")
+  println("Which neighborhoods had the worst response times to fire calls in 2018?")
+  fireTsDF
+    .withColumn("DelayNumber", $"Delay".cast(FloatType))
+    .drop("Delay")
+    .where(year($"IncidentDate") === 2018)
+    .groupBy("City", "Neighborhood")
+    .max("DelayNumber")
+    .select("City", "Neighborhood", "max(DelayNumber)")
+    .orderBy(desc("max(DelayNumber)"))
+    .show(10, false)
 
+  println("Which week in the year 2018 had the most fire calls?")
+  fireTsDF
+    .where(year($"IncidentDate") === 2018)
+    .groupBy(weekofyear($"IncidentDate").alias("week"))
+    .count()
+    .orderBy(desc("count"))
+    .show(1)
 
+  println("Is there a correlation between neighborhood, zip code, and number of fire calls?")
+  fireTsDF
+    .groupBy("City", "Neighborhood", "Zipcode")
+    .count()
+    .orderBy(desc("count"))
+    .show(100, false)
+
+  println("How can we use Parquet files or SQL tables to store this data and read it back?")
+  fireTsDF
+    .write
+    .mode(SaveMode.Overwrite)
+    .parquet("out/fireDpt")
+
+  fireTsDF
+    .withColumn("IncidentYear", year($"IncidentDate"))
+    .withColumn("IncidentMonth", month($"IncidentDate"))
+    .write
+    .mode(SaveMode.Overwrite)
+    .partitionBy("IncidentYear", "IncidentMonth")
+    .parquet("out/fireDptPartitioned")
+
+  spark.read.parquet("out/fireDpt").show(10, false)
+  spark.read.parquet("out/fireDptPartitioned/IncidentYear=2018/IncidentMonth=1").show(10, false)
   spark.close()
 }

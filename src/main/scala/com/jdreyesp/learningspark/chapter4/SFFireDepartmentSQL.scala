@@ -2,7 +2,7 @@ package com.jdreyesp.learningspark.chapter4
 
 import org.apache.spark.sql.functions.{col, desc, when}
 import org.apache.spark.sql.types._
-import org.apache.spark.sql.{Row, SparkSession}
+import org.apache.spark.sql.{Row, SaveMode, SparkSession}
 
 /**
  * Note: Using SF Fire Department dataset from chapter 3 instead of Airline On-Time Performance and Causes of Flight Delays
@@ -52,18 +52,59 @@ object SFFireDepartmentSQL extends App {
       |Delay DOUBLE
       |""".stripMargin
 
+  println("Create and use a non default DB")
+  spark.sql("CREATE DATABASE learn_spark_db")
+  spark.sql("USE learn_spark_db")
+
   val sfFireDF = spark.read
     .option("header", true)
     .schema(schemaDDL)
     .csv(csvFilePath)
 
-  println("Read and create a temporary view in Spark's default database")
-  sfFireDF.createOrReplaceTempView("sf_fire_calls_tbl")
+  println("Creating a managed table in the learn_spark_db")
+//  spark.sql("CREATE TABLE sf_fire_calls_tbl " +
+//    "(CallNumber INT, " +
+//    "UnitID STRING, " +
+//    "IncidentNumber BIGINT,
+  //    ...)")
 
+  // Alternatively
+  //TODO: Find a way to overwrite it correctly
+  sfFireDF
+    .write
+    .mode(SaveMode.Overwrite)
+    .saveAsTable("sf_fire_calls_tbl")
+
+//  println("We can also create an unmanaged (metadata managed by Spark but data managed by user) table")
+//  sfFireDF
+//    .write
+//    .option("path", "out/data/sf_fire_calls")
+//    .mode(SaveMode.Overwrite)
+//    .saveAsTable("sf_fire_calls_tbl")
+
+  println("We can cache the table in lazy mode (Spark 3.0+) so that it's cached only when it's used")
+  spark.sql(
+    """
+      |CACHE LAZY TABLE sf_fire_calls_tbl
+      |""".stripMargin)
+
+//  println("Read and create a temporary view in Spark's default database")
+  //  sfFireDF.createOrReplaceGlobalTempView("sf_fire_calls_tbl")
+  //  sfFireDF.createOrReplaceTempView("sf_fire_calls_tbl")
+
+  println("Viewing the Spark database metadata")
+  spark.catalog.listDatabases().show(10, false)
+  spark.catalog.listTables().show(10, false)
+  spark.catalog.listColumns("sf_fire_calls_tbl").show(30, false)
+
+  println("We can read DB tables directly from Spark and convert them to a DF")
+  spark.table("sf_fire_calls_tbl").show(10, false)
+
+  println("Using SQL statements")
   spark.sql(
     """SELECT IncidentNumber, City, Delay
-      |FROM sf_fire_calls_tbl WHERE Delay > 3
-      |ORDER BY Delay DESC
+      | FROM sf_fire_calls_tbl
+      | ORDER BY Delay DESC
       |""".stripMargin)
     .show(10, false)
 

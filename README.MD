@@ -18,7 +18,7 @@ Prerequisites:
 - Have SBT installed in your machine
 - Have JAVA_HOME and SPARK_HOME correctly configured in PATH
 
-In order to package the "uber" jar, run:
+In order to package the "uber" jar with all resources, run:
 
 `sbt clean package`
 
@@ -28,9 +28,11 @@ Then run:
 spark-submit --class com.jdreyesp.learningspark.chapter<X>.<APP_NAME> target/scala-2.12/learning-spark_2.12-0.1.jar <PARAMS>
 ```
 
+or run it from your favourite IDE.
+
 ### Running all tests
 
-Some exercises are in form of tests, and they can all executed as follows:
+Some exercises are in the form of tests, and they can all executed as follows:
 
 `sbt test`
 

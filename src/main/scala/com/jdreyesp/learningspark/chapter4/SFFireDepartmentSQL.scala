@@ -1,9 +1,8 @@
 package com.jdreyesp.learningspark.chapter4
 
+import org.apache.spark.sql.functions.{col, desc, when}
+import org.apache.spark.sql.types._
 import org.apache.spark.sql.{Row, SparkSession}
-import org.apache.spark.sql.catalyst.dsl.expressions.StringToAttributeConversionHelper
-import org.apache.spark.sql.functions.{col, desc, expr, map_values, when}
-import org.apache.spark.sql.types.{DoubleType, LongType, StringType, StructField, StructType}
 
 /**
  * Note: Using SF Fire Department dataset from chapter 3 instead of Airline On-Time Performance and Causes of Flight Delays

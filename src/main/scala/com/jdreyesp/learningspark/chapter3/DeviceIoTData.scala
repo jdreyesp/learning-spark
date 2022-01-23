@@ -1,6 +1,6 @@
 package com.jdreyesp.learningspark.chapter3
 
-import org.apache.spark.sql.SparkSession
+import com.jdreyesp.learningspark.SparkSessionInitializer
 
 case class DeviceIoTData(battery_level: Long, c02_level: Long, cca2: String, cca3: String,
                          cn: String, device_id: Long, device_name: String, humidity: Long,
@@ -9,14 +9,7 @@ case class DeviceIoTData(battery_level: Long, c02_level: Long, cca2: String, cca
 
 case class DeviceTempByCountry(temp: Long, device_name: String, device_id: Long, cca3: String)
 
-object DeviceIoTData extends App {
-
-  val spark = SparkSession.builder()
-    .appName("DeviceIotData")
-    .master("local")
-    .config("spark.driver.bindAddress", "127.0.0.1")
-    .config("spark.driver.host", "127.0.0.1")
-    .getOrCreate()
+object DeviceIoTData extends App with SparkSessionInitializer {
 
   import spark.implicits._
 

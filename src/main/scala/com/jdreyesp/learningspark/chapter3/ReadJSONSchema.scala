@@ -7,6 +7,7 @@ import org.apache.spark.{SparkConf, SparkContext}
 
 object ReadJSONSchema extends App {
 
+  // We use conf here to show another way of initializing a SparkSession
   val conf = new SparkConf()
     .setAppName("ReadJSONSchema")
     .setMaster("local")

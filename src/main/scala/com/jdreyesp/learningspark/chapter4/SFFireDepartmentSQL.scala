@@ -1,5 +1,6 @@
 package com.jdreyesp.learningspark.chapter4
 
+import com.jdreyesp.learningspark.SparkSessionInitializer
 import org.apache.spark.sql.functions.{col, desc, when}
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.{Row, SaveMode, SparkSession}
@@ -8,14 +9,7 @@ import org.apache.spark.sql.{Row, SaveMode, SparkSession}
  * Note: Using SF Fire Department dataset from chapter 3 instead of Airline On-Time Performance and Causes of Flight Delays
  * one, since it's not available through its website (https://oreil.ly/gfzLZ) at the time this exercise was implemented.
  */
-object SFFireDepartmentSQL extends App {
-
-  val spark = SparkSession.builder()
-    .appName("SF Fire Department SQL")
-    .config("spark.driver.bindAddress", "127.0.0.1")
-    .config("spark.driver.host", "127.0.0.1")
-    .master("local")
-    .getOrCreate()
+object SFFireDepartmentSQL extends App with SparkSessionInitializer {
 
   val csvFilePath: String = getClass.getClassLoader.getResource("chapter4/sf-fire-calls.csv").getPath
 

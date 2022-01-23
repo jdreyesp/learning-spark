@@ -1,17 +1,11 @@
 package com.jdreyesp.learningspark.chapter3
 
-import org.apache.spark.sql.{SaveMode, SparkSession}
-import org.apache.spark.sql.functions.{col, countDistinct, dayofmonth, desc, expr, format_number, month, to_timestamp, weekofyear, year}
+import com.jdreyesp.learningspark.SparkSessionInitializer
+import org.apache.spark.sql.SaveMode
+import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.FloatType
 
-object SFFireDepartment extends App {
-
-  val spark = SparkSession.builder()
-    .appName("SF Fire Department")
-    .config("spark.driver.bindAddress", "127.0.0.1")
-    .config("spark.driver.host", "127.0.0.1")
-    .master("local")
-    .getOrCreate()
+object SFFireDepartment extends App with SparkSessionInitializer {
 
   val sfFireDepartmentInputFilePath = getClass.getClassLoader.getResource("chapter3/sf-fire-calls.csv").getPath
 

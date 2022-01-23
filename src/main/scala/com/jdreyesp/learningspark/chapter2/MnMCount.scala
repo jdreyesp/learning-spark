@@ -1,15 +1,9 @@
 package com.jdreyesp.learningspark.chapter2
 
-import org.apache.spark.sql.SparkSession
+import com.jdreyesp.learningspark.SparkSessionInitializer
 import org.apache.spark.sql.functions.{col, desc}
 
-object MnMCount extends App {
-
-  val spark = SparkSession.builder()
-    .appName("MnMCount")
-    .master("local[*]")
-    .config("spark.driver.bindAddress", "localhost")
-    .getOrCreate()
+object MnMCount extends App with SparkSessionInitializer {
 
   if (args.length < 1) {
     print("Usage: MnMcount <mnm_file_dataset>")

@@ -252,3 +252,6 @@ spark-warehouse/
 /build
 /dist
 *.egg-info
+
+# Deltalake tables data
+delta/

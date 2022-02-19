@@ -35,17 +35,19 @@ object UDF extends App with SparkSessionInitializer {
 
   import spark.implicits._
 
-  val df = Seq(Human(PersonalChar(12, 15), PhysicalChar(10, 12))).toDF
-  df.createOrReplaceTempView("fantasyPeople")
+  val humanDS = Seq(Human(PersonalChar(12, 15), PhysicalChar(10, 12)))
+    .toDF
+    .as[Human]
 
-  spark.sql(
+  humanDS.createOrReplaceTempView("fantasyPeople")
+
+  val elfDS = spark.sql(
     """
       SELECT humanToElfPersonalChar(personalChar) AS personalChar,
              humanToElfPhysicalChar(physicalChar) AS physicalChar
       FROM fantasyPeople""")
     .as[Elf]
-    .show(false)
 
-
+  elfDS.show(false)
 
 }

@@ -21,13 +21,15 @@ object ReadJSONSchema extends App {
     .config(sparkConf.getConf)
     .getOrCreate()
 
-  if (args.length <= 0) {
-    println("usage ReadJSONSchema <file path to blogs.json>")
-    System.exit(1)
-  }
+  // We could use this with args on the spark-submit job
+//  if (args.length <= 0) {
+//    println("usage ReadJSONSchema <file path to blogs.json>")
+//    System.exit(1)
+//  }
+// Get the path to the JSON file
+// val jsonFile = args(0)
 
-  // Get the path to the JSON file
-  val jsonFile = args(0)
+  val jsonFile = getClass.getClassLoader.getResource("chapter3/blogs.json").getPath
 
   // Define our schema programmatically
 //  val schema = StructType(Array(
@@ -59,7 +61,7 @@ object ReadJSONSchema extends App {
   blogsDF.show(false)
 
   // Prints the schema
-  println(blogsDF.printSchema)
+  blogsDF.printSchema
   println(blogsDF.schema)
 
   // Compute using spark functions
@@ -81,11 +83,11 @@ object ReadJSONSchema extends App {
   println("EXPR SAME AS COL")
   println(blogsDF
   .select(expr("Hits")).show(2))
-  println(blogsDF
-    .select(col("Hits")).show(2))
+  blogsDF
+    .select(col("Hits")).show(2)
 
   println("SORT")
-  println(blogsDF.sort(col("Id").desc).show())
+  blogsDF.sort(col("Id").desc).show()
 
   println("USING ROWS")
   import scala.collection.JavaConverters._
@@ -94,12 +96,12 @@ object ReadJSONSchema extends App {
   println("FIRST WAY")
   val seqRow: Seq[(String, String)] = Seq(("Matei Zaharia", "CA"), ("Reynold Xin", "CA"))
   val authorsDF = seqRow.toDF("Author", "State")
-  println(authorsDF.show())
+  authorsDF.show()
 
   println("SECOND WAY (FORCING SCHEMA)")
   val rows: java.util.List[Row] = Seq(Row("Matei Zaharia", "CA"), Row("Reynold Xin", "CA")).asJava
   val authorsDFSchema: DataFrame = spark.createDataFrame(rows, StructType(Array(StructField("Author", StringType, false), StructField("State", StringType, false))))
-  println(authorsDFSchema.show())
+  authorsDFSchema.show()
 
   println("WRITE AUTHORS AS PARQUET, PARTITIONED BY STATE")
   authorsDFSchema.write

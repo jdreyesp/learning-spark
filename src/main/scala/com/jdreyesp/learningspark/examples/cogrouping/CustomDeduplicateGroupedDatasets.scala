@@ -1,4 +1,4 @@
-package com.jdreyesp.learningspark.examples
+package com.jdreyesp.learningspark.examples.cogrouping
 
 import com.jdreyesp.learningspark.SparkSessionInitializer
 import org.apache.spark.sql.KeyValueGroupedDataset
@@ -39,9 +39,9 @@ object CustomDeduplicateGroupedDatasets extends App with SparkSessionInitializer
 
   val df2GroupedDataset: KeyValueGroupedDataset[String, Example] = df2.as[Example].groupByKey[String](groupingByKeyFunction)
 
-    df1.as[Example]
+  df1.as[Example]
     .groupByKey(groupingByKeyFunction)
-      .cogroup(df2GroupedDataset)(deduplicateInGroupFunction)
-      .show(false)
+    .cogroup(df2GroupedDataset)(deduplicateInGroupFunction)
+    .show(false)
 
 }

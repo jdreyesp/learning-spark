@@ -1,4 +1,4 @@
-package com.jdreyesp.learningspark.examples
+package com.jdreyesp.learningspark.examples.spark3
 
 import com.jdreyesp.learningspark.SparkSessionInitializer
 

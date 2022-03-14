@@ -23,7 +23,7 @@ object ReadJSONSchema extends App {
 
   // We could use this with args on the spark-submit job
 //  if (args.length <= 0) {
-//    println("usage ReadJSONSchema <file path to blogs.json>")
+//    println("usage ReadJSONSchema <file path to newBlogs.json>")
 //    System.exit(1)
 //  }
 // Get the path to the JSON file

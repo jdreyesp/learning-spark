@@ -1,0 +1,4 @@
+[
+  {"Id":7, "First": "Diego", "Last":"Reyes", "Url":"https://thenomadlab.io", "Published":"1/1/2022", "Hits": 4535, "Campaigns": ["twitter", "LinkedIn"]},
+  {"Id":8, "First": "Hank","Last": "Smith","Url": "https://thenomadlab.io", "Published": "1/1/2022", "Hits":4535, "Campaigns": ["twitter", "LinkedIn"]}
+]
